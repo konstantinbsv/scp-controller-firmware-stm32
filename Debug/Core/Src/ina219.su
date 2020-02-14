@@ -1,0 +1,5 @@
+ina219.c:15:19:InitializeI2C	16	static
+ina219.c:22:19:ReadRegister	32	static
+ina219.c:27:19:WriteRegister	40	static
+ina219.c:37:19:Set_32V_3A2	24	static
+ina219.c:47:19:Set_32V_1A6	24	static

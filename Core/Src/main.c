@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "ina219.h"
 
 /* USER CODE END Includes */
 
@@ -48,6 +49,8 @@ I2C_HandleTypeDef hi2c1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+
+uint16_t read_buffer[10]; // buffer to store data read from I2C
 
 /* USER CODE END PV */
 
@@ -100,6 +103,13 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
+  InitializeI2C(&hi2c1);
+  ReadRegister(INA219_ADDRESS_1, INA219_REG_CONFIG, read_buffer);
+  Set_32V_1A6(INA219_ADDRESS_1);
+  ReadRegister(INA219_ADDRESS_1, INA219_REG_CONFIG, read_buffer);
+  Set_32V_3A2(INA219_ADDRESS_1);
+   ReadRegister(INA219_ADDRESS_1, INA219_REG_CONFIG, read_buffer);
+
   /* USER CODE END 2 */
  
  
@@ -108,6 +118,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+
+//	  HAL_GPIO_TogglePin(SCP1_GPIO_Port, SCP1_Pin);
+//	  HAL_Delay(100);
+//	  HAL_GPIO_TogglePin(SCP2_GPIO_Port, SCP2_Pin);
+//	  HAL_Delay(100);
+//	  HAL_GPIO_TogglePin(SCP3_GPIO_Port, SCP3_Pin);
+//	  HAL_Delay(100);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
