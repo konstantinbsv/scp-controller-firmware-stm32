@@ -50,7 +50,7 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 
-uint16_t read_buffer[10]; // buffer to store data read from I2C
+uint16_t read_buffer[1]; // buffer to store data read from I2C
 
 /* USER CODE END PV */
 
@@ -105,10 +105,8 @@ int main(void)
 
   InitializeI2C(&hi2c1);
   ReadRegister(INA219_ADDRESS_1, INA219_REG_CONFIG, read_buffer);
-  Set_32V_1A6(INA219_ADDRESS_1);
+  Set_16V_1A55(INA219_ADDRESS_1);
   ReadRegister(INA219_ADDRESS_1, INA219_REG_CONFIG, read_buffer);
-  Set_32V_3A2(INA219_ADDRESS_1);
-   ReadRegister(INA219_ADDRESS_1, INA219_REG_CONFIG, read_buffer);
 
   /* USER CODE END 2 */
  

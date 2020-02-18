@@ -14,8 +14,15 @@
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_i2c.h"
 
+#define RSHUNT 		0.100 	// value of shunt resistor in ohms (used for programming calibration register)
 #define I2C_TIMEOUT 1000
 #define INA219_REG_BYTES_SIZE 2 // All INA219 16-bit registers are two 8-bit bytes through I2C
+
+// variables for storing calculated LSB values.
+float current_lsb;
+float power_lsb;
+uint16_t cal_reg;
+
 
 /* I2C Addresses */
 enum {
@@ -33,7 +40,7 @@ enum {
 #define INA219_REG_BUS_V 	(0x02) // read only
 #define INA219_REG_POWER 	(0x03) // read only
 #define INA219_REG_CURRENT 	(0x04) // read only
-#define INA219_REG_CAL 		(0x05) // calibration register, R/W, default: 0x000
+#define INA219_REG_CAL 		(0x05) // calibration register, R/W, default: 0x00
 
 /* Configuration Reset */
 #define INA219_CONFIG_RESET (0x8000) // write to configuration register to perform software reset
@@ -88,9 +95,9 @@ enum {
 enum {
 	INA219_MODE_POWERDOWN				= (0x0000),	// power down
 	INA219_MODE_SHUNT_V_TRIGGERED		= (0x0001),	// shunt voltage, triggered
-	INA219_MODE_BUS_V_TRIGGERED		= (0x0002),	// bus voltage, triggered
-	INA219_MODE_S_AND_B_V_TRIGGERED	= (0x0003),	// shunt and bus voltage, triggered
-	INA219_MODE_ADC_OFF				= (0x0004),	// ADC off (disabled)
+	INA219_MODE_BUS_V_TRIGGERED			= (0x0002),	// bus voltage, triggered
+	INA219_MODE_S_AND_B_V_TRIGGERED		= (0x0003),	// shunt and bus voltage, triggered
+	INA219_MODE_ADC_OFF					= (0x0004),	// ADC off (disabled)
 	INA219_MODE_SHUNT_V_CONTINUOUS		= (0x0005),	// shunt voltage, continuous
 	INA219_MODE_BUS_V_CONTINUOUS		= (0x0006),	// bus voltage, continuous
 	INA219_MODE_S_AND_B_V_CONTINUOUS	= (0x0007),	// shunt and bus voltage, continuous	(default)
@@ -100,5 +107,6 @@ enum {
 
 HAL_StatusTypeDef InitializeI2C (I2C_HandleTypeDef *i2c_handle);
 HAL_StatusTypeDef ReadRegister (uint8_t device_address, uint8_t reg_address, uint16_t *read_data);
+HAL_StatusTypeDef Set_16V_1A55 (uint8_t device_address);
 
 #endif /* INC_INA219_H_ */
