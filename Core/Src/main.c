@@ -104,9 +104,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   InitializeI2C(&hi2c1);
-  ReadRegister(INA219_ADDRESS_1, INA219_REG_CONFIG, read_buffer);
   Set_16V_1A55(INA219_ADDRESS_1);
-  ReadRegister(INA219_ADDRESS_1, INA219_REG_CONFIG, read_buffer);
+  GetBusVoltage_V(INA219_ADDRESS_1);
 
   /* USER CODE END 2 */
  

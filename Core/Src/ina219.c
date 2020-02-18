@@ -50,16 +50,33 @@ HAL_StatusTypeDef Set_16V_1A55 (uint8_t device_address) {
 
 	return (cal_stat == conf_stat) ? HAL_OK : HAL_ERROR;
 }
-
-float GetBusVoltage(uint8_t device_address) {
+/*
+ * @brief Retrieves and processes raw bus voltage value from register.
+ *
+ * @return Bus votlage in Volts
+ */
+float GetBusVoltage_V(uint8_t device_address) {
 	uint16_t raw_bus_voltage;
 	ReadRegister(device_address, INA219_REG_BUS_V, &raw_bus_voltage); // get raw bus voltage from INA219
 
 	raw_bus_voltage = raw_bus_voltage >> 3;					// bit shift 3 right to remove empty bit, CNVR, and OVF
-	int16_t bus_voltage_mV = (int16_t) raw_bus_voltage * 4; // *4mV (bus voltage LSB) to get actual bus voltage measured my device
-	float bus_voltage_V = (float) raw_bus_voltage * 0.001;	// multiply by 0.001 to convert mV -> V
+	int16_t bus_voltage_mV = (int16_t) raw_bus_voltage * 4; // *4mV (bus voltage LSB) to get actual bus voltage measured my device and convert to signed
+	float bus_voltage_V = (float)(bus_voltage_mV * 0.001);	// multiply by 0.001 to convert mV -> V
 
 	return bus_voltage_V;
 }
+/*
+ * @brief Updates configuration register. Retrieves raw value from current register and performs calculations for LSB.
+ *
+ * @return Current in milliamps
+ */
+float GetCurrent_mA (uint8_t device_address){
+	uint16_t raw_current;
 
+	WriteRegister(device_address, INA219_REG_CONFIG, cal_reg); 	 // reinitialize configuration register in case of chip reset
+	ReadRegister(device_address, INA219_REG_CURRENT, &raw_current); // get raw current value from register
 
+	float current_mA = ((int16_t) raw_current) / current_lsb;	 // convert to signed and divide by LSB value to get current in mA
+
+	return current_mA;
+}
