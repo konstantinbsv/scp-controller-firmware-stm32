@@ -108,5 +108,6 @@ enum {
 HAL_StatusTypeDef InitializeI2C (I2C_HandleTypeDef *i2c_handle);
 HAL_StatusTypeDef ReadRegister (uint8_t device_address, uint8_t reg_address, uint16_t *read_data);
 HAL_StatusTypeDef Set_16V_1A55 (uint8_t device_address);
+float GetBusVoltage(uint8_t device_address);
 
 #endif /* INC_INA219_H_ */
