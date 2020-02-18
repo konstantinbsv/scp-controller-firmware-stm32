@@ -1,6 +1,0 @@
-ina219.c:15:19:InitializeI2C	16	static
-ina219.c:22:19:ReadRegister	40	static
-ina219.c:30:19:WriteRegister	40	static
-ina219.c:40:19:Set_16V_1A55	32	static
-ina219.c:58:7:GetBusVoltage_V	40	static
-ina219.c:73:7:GetCurrent_mA	24	static
