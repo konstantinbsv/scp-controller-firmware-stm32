@@ -24,6 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ina219.h"
+#include "serial.h"
+#include "ntc.h"
 
 /* USER CODE END Includes */
 
@@ -103,9 +105,15 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
+  // initialize custom libraries
   InitializeI2C(&hi2c1);
+  InitializeUART(&huart2);
+  InitializeADC(&hadc1);
+
   Set_16V_1A55(INA219_ADDRESS_1);
-  GetBusVoltage_V(INA219_ADDRESS_1);
+
+  // enable SCP1
+  HAL_GPIO_WritePin(SCP1_GPIO_Port, SCP1_Pin, SET);
 
   /* USER CODE END 2 */
  
@@ -115,8 +123,29 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  float bus_v = GetBusVoltage_V(INA219_ADDRESS_1);
+	  float current = GetCurrent_mA(INA219_ADDRESS_1);
+	  float power = GetPower_mW(INA219_ADDRESS_1);
+	  uint32_t ntc1_reading = ReadNTC(NTC1_CHANNEL);
 
+	  UARTPrintCharArray("Bus voltage: ");
+	  UARTPrintFloat(bus_v, 3);
+	  UARTNewlineRet();
 
+	  UARTPrintCharArray("Current: ");
+	  UARTPrintFloat(current, 3);
+	  UARTNewlineRet();
+
+	  UARTPrintCharArray("Power: ");
+	  UARTPrintFloat(power, 3);
+	  UARTNewlineRet();
+	  UARTNewlineRet();
+
+	  UARTPrintCharArray("NTC1: ");
+	  UARTPrintFloat(ntc1_reading, 3);
+	  UARTNewlineRet();
+
+	  HAL_Delay(1000);
 //	  HAL_GPIO_TogglePin(SCP1_GPIO_Port, SCP1_Pin);
 //	  HAL_Delay(100);
 //	  HAL_GPIO_TogglePin(SCP2_GPIO_Port, SCP2_Pin);
