@@ -110,5 +110,6 @@ HAL_StatusTypeDef ReadRegister (uint8_t device_address, uint8_t reg_address, uin
 HAL_StatusTypeDef Set_16V_1A55 (uint8_t device_address);
 float GetBusVoltage_V(uint8_t device_address);
 float GetCurrent_mA(uint8_t device_address);
+float GetPower_mW(uint8_t device_address);
 
 #endif /* INC_INA219_H_ */
