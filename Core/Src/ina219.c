@@ -76,8 +76,8 @@ float GetCurrent_mA(uint8_t device_address){
 	WriteRegister(device_address, INA219_REG_CAL, cal_reg); 		// reinitialize calibration register in case of chip reset
 	ReadRegister(device_address, INA219_REG_CURRENT, &raw_current); // get raw current value from register
 
-	float current_mA = (float) raw_current * current_lsb * 1000; 	// convert to signed and multiply by LSB value
-																	// and *1000 (register value is in uA) to get current in mA
+	float current_mA = (float)((int16_t) raw_current) * current_lsb * 1000; 	// convert to signed and multiply by LSB value
+																				// and *1000 (register value is in uA) to get current in mA
 
 	return current_mA;
 }
@@ -88,7 +88,7 @@ float GetPower_mW(uint8_t device_address) {
 	WriteRegister(device_address, INA219_REG_CAL, cal_reg); 	// reinitialize calibration register in case of chip reset
 	ReadRegister(device_address, INA219_REG_POWER, &raw_power); // get raw power value from register
 
-	float power_mW = (float) raw_power * power_lsb * 1000; 	// convert to signed and multiply by LSB value (=20*current_lsb)
-															// and * 1000 (to convert to mW from uW)
+	float power_mW = (float)((int16_t) raw_power) * power_lsb * 1000; 	// convert to signed and multiply by LSB value (=20*current_lsb)
+																		// and * 1000 (to convert to mW from uW)
 	return power_mW;
 }
