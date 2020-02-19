@@ -47,3 +47,9 @@ HAL_StatusTypeDef UARTPrintFloat(float data, uint8_t fractional_digits) {
 
 	return status;
 }
+
+HAL_StatusTypeDef UARTNewlineRet() {
+	char newline_ret[] = "\n\r";
+
+	return UARTPrintCharArray(newline_ret);
+}

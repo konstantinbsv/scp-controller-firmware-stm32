@@ -21,5 +21,6 @@
 HAL_StatusTypeDef InitializeUART(UART_HandleTypeDef *serial_handle);
 HAL_StatusTypeDef UARTPrintCharArray(char data[]);
 HAL_StatusTypeDef UARTPrintFloat(float data, uint8_t fractional_digits);
+HAL_StatusTypeDef UARTNewlineRet();
 
 #endif /* INC_SERIAL_H_ */
