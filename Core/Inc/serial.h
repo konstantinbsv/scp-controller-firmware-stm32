@@ -2,7 +2,7 @@
  * serial.h
  *
  *  Created on: Feb. 18, 2020
- *      Author: Konstantin
+ *      Author: Konstantin Borissov
  */
 
 #ifndef INC_SERIAL_H_
