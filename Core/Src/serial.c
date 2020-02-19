@@ -31,10 +31,13 @@ HAL_StatusTypeDef UARTPrintFloat(float data, uint8_t fractional_digits) {
 		conversion_multiplier *= 10;
 	}
 
-	// separate integer from decimal part
-	data *= conversion_multiplier;
-	uint16_t integer_part	 = (uint16_t) data / conversion_multiplier;
-	uint16_t fractional_part = (uint16_t) data % conversion_multiplier;
+//	// separate integer from decimal part
+//	data *= conversion_multiplier;
+//	uint16_t integer_part	 = (uint16_t) data / conversion_multiplier;
+//	uint16_t fractional_part = (uint16_t) data % conversion_multiplier;
+
+	uint16_t integer_part 	 = (uint16_t) data;
+	uint16_t fractional_part = (uint16_t) (data * conversion_multiplier) % conversion_multiplier;
 
 	// copy into write_buffer with decimal point
 	if (fractional_digits == 0) {
