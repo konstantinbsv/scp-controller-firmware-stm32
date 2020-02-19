@@ -17,7 +17,6 @@ static ADC_HandleTypeDef *adc_handle = NULL;
 HAL_StatusTypeDef InitializeADC (ADC_HandleTypeDef *handle) {
 	adc_handle = handle;
 
-
 	return HAL_OK;
 }
 
@@ -39,6 +38,14 @@ uint32_t ReadNTCRaw(int8_t ntc_channel) {
 	return adc_value;
 }
 
-float GetTemp_C(uint8_t ntc_channel) {
-	raw_adc_value = Read
+float GetResistance_R(uint8_t ntc_channel) {
+	uint32_t raw_adc_value = ReadNTCRaw(ntc_channel); // get raw value from ADC
+
+	// calculate voltage at NTC terminal
+	float ntc_voltage = ((float)raw_adc_value / MAX_ADC) * 3.3;
+
+	// calculate resistance of NTC
+	float r_ntc = R_RESISTOR * (VCC/ntc_voltage - 1);
+
+	return r_ntc;
 }
