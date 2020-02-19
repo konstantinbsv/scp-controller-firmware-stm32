@@ -21,7 +21,7 @@ HAL_StatusTypeDef InitializeADC (ADC_HandleTypeDef *handle) {
 	return HAL_OK;
 }
 
-uint32_t ReadNTC(int8_t ntc_channel) {
+uint32_t ReadNTCRaw(int8_t ntc_channel) {
 	uint32_t adc_value;
 
 	ADC_ChannelConfTypeDef sConfig = {0};
@@ -37,4 +37,8 @@ uint32_t ReadNTC(int8_t ntc_channel) {
 	HAL_ADC_Stop(adc_handle);							// stop ADC
 
 	return adc_value;
+}
+
+float GetTemp_C(uint8_t ntc_channel) {
+	raw_adc_value = Read
 }
