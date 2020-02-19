@@ -14,11 +14,11 @@
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_i2c.h"
 
-#define RSHUNT 		0.100 	// value of shunt resistor in ohms (used for programming calibration register)
-#define I2C_TIMEOUT 1000
-#define INA219_REG_BYTES_SIZE 2 // All INA219 16-bit registers are two 8-bit bytes through I2C
+#define RSHUNT 		0.100 		// value of shunt resistor in ohms (used for programming calibration register)
+#define I2C_TIMEOUT 1000		// used as timeout for HAL I2C functions
+#define INA219_REG_BYTES_SIZE 2 // All INA219 16-bit registers are two 8-bit bytes through I2C. Used to tell HAL to transmit 2 bytes
 
-// variables for storing calculated LSB values.
+/* Variables for storing calculated LSB values and calibration register value */
 float current_lsb;
 float power_lsb;
 uint16_t cal_reg;

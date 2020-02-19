@@ -61,7 +61,7 @@ float GetBusVoltage_V(uint8_t device_address) {
 
 	raw_bus_voltage = raw_bus_voltage >> 3;					// bit shift 3 right to remove empty bit, CNVR, and OVF
 	int16_t bus_voltage_mV = (int16_t) raw_bus_voltage * 4; // *4mV (bus voltage LSB) to get actual bus voltage measured my device and convert to signed
-	float bus_voltage_V = (float)(bus_voltage_mV * 0.001);	// multiply by 0.001 to convert mV -> V
+	float bus_voltage_V = (float)bus_voltage_mV * 0.001;	// multiply by 0.001 to convert mV -> V
 
 	return bus_voltage_V;
 }
@@ -73,10 +73,11 @@ float GetBusVoltage_V(uint8_t device_address) {
 float GetCurrent_mA (uint8_t device_address){
 	uint16_t raw_current;
 
-	WriteRegister(device_address, INA219_REG_CONFIG, cal_reg); 	 // reinitialize configuration register in case of chip reset
+	WriteRegister(device_address, INA219_REG_CAL, cal_reg); 	 // reinitialize calibration register in case of chip reset
 	ReadRegister(device_address, INA219_REG_CURRENT, &raw_current); // get raw current value from register
 
-	float current_mA = ((int16_t) raw_current) / current_lsb;	 // convert to signed and divide by LSB value to get current in mA
+	float current_mA = (float)((int16_t) raw_current) * current_lsb * 1000; 	// convert to signed and multiply by LSB value
+																				// and *1000 (register value is in uA) to get current in mA
 
 	return current_mA;
 }
