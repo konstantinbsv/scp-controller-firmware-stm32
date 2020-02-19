@@ -10,7 +10,9 @@
 static I2C_HandleTypeDef *ina219_i2c_handle = NULL;
 
 /**
- * Initialize I2C handle
+ * @brief Initialize I2C handle
+ *
+ * @return HAL_OK
  */
 HAL_StatusTypeDef InitializeI2C (I2C_HandleTypeDef *i2c_handle) {
 	ina219_i2c_handle = i2c_handle;
@@ -18,7 +20,12 @@ HAL_StatusTypeDef InitializeI2C (I2C_HandleTypeDef *i2c_handle) {
 	return HAL_OK;
 }
 
-
+/*
+ * @brief Reads from specified register of specified device and pieces MSB and LSB to form data.
+ *        Note: pass pointer to value into which to read the data.
+ *
+ * @return HAL_OK if operation successful
+ */
 HAL_StatusTypeDef ReadRegister (uint8_t device_address, uint8_t reg_address, uint16_t *read_data) {
 	uint8_t read_buffer[2];
 	HAL_StatusTypeDef status = HAL_I2C_Mem_Read(ina219_i2c_handle, device_address, reg_address, I2C_MEMADD_SIZE_8BIT, read_buffer, INA219_REG_BYTES_SIZE, I2C_TIMEOUT);
@@ -26,7 +33,11 @@ HAL_StatusTypeDef ReadRegister (uint8_t device_address, uint8_t reg_address, uin
 
 	return status;
 }
-
+/*
+ * @brief Writes data to specified register of specified device.
+ *
+ * @return HAL_OK if operation successful.
+ */
 HAL_StatusTypeDef WriteRegister (uint8_t device_address, uint8_t reg_address, uint16_t write_data) {
 
 	uint8_t write_buffer[2] = { (uint8_t) (write_data >> 8), (uint8_t) (write_data) };
@@ -35,7 +46,11 @@ HAL_StatusTypeDef WriteRegister (uint8_t device_address, uint8_t reg_address, ui
 }
 
 /*
- * Set PGA gain and registers for measuring up to 16V and 1.15A
+ * @brief Sets PGA gain and registers for measuring up to 16V and 1.15A. Calculates and stores current and power LSBs.
+ * 		  Calculates calibration value and initializes calibration register.
+ *
+ * @return HAL_OK if both calibration and configuration initializations are successful.
+ * 		   HAL_ERROR if either fails
  */
 HAL_StatusTypeDef Set_16V_1A55 (uint8_t device_address) {
 	uint16_t config_reg = 	INA219_BRNG_16V | INA219_PGA_160mV |
@@ -50,10 +65,11 @@ HAL_StatusTypeDef Set_16V_1A55 (uint8_t device_address) {
 
 	return (cal_stat == conf_stat) ? HAL_OK : HAL_ERROR;
 }
+
 /*
  * @brief Retrieves and processes raw bus voltage value from register.
  *
- * @return Bus votlage in Volts
+ * @return Bus votlage in volts (V)
  */
 float GetBusVoltage_V(uint8_t device_address) {
 	uint16_t raw_bus_voltage;
@@ -65,10 +81,11 @@ float GetBusVoltage_V(uint8_t device_address) {
 
 	return bus_voltage_V;
 }
+
 /*
- * @brief Updates configuration register. Retrieves raw value from current register and performs calculations for LSB.
+ * @brief Updates configuration register. Retrieves raw value from current register and performs calculations.
  *
- * @return Current in milliamps
+ * @return Current in milliamps (mA)
  */
 float GetCurrent_mA(uint8_t device_address){
 	uint16_t raw_current;
@@ -78,10 +95,14 @@ float GetCurrent_mA(uint8_t device_address){
 
 	float current_mA = (float)((int16_t) raw_current) * current_lsb * 1000; 	// convert to signed and multiply by LSB value
 																				// and *1000 (register value is in uA) to get current in mA
-
 	return current_mA;
 }
 
+/*
+ * @brief Updates configuration register. Retrieves raw value from power register and performs calculations.
+ *
+ * @return Power in milliwatts (mW)
+ */
 float GetPower_mW(uint8_t device_address) {
 	uint16_t raw_power;
 
