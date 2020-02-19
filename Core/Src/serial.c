@@ -24,7 +24,7 @@ HAL_StatusTypeDef UARTPrintCharArray(char data[]) {
 
 HAL_StatusTypeDef UARTPrintFloat(float data, uint8_t fractional_digits) {
 	uint8_t write_buffer[8];
-	uint8_t conversion_multiplier = 1;
+	uint16_t conversion_multiplier = 1;
 
 	// conversion_multiplier = 10^fractional_digits
 	for (uint8_t i = 0; i < fractional_digits; i++) {
