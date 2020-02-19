@@ -17,8 +17,12 @@
 #define ADC_TIMEOUT 	1000 					// maximum delay for ADC conversion
 #define SAMPLINGTIME 	ADC_SAMPLETIME_3CYCLES	// sampling time
 #define MAX_ADC			4096					// max ADC value = 2^adc_resolution
-#define VCC				5.0						// power supply to NTC in volts
-#define R_RESISTOR		18000					// value of SMD resistor in ohms
+#define VCC				5.0f					// power supply to NTC in volts
+#define R_RESISTOR		18000.0f				// value of SMD resistor in ohms
+#define T0				298.15f					// room temperature in Kelvin (25.0 C = 298.15 K)
+#define R0				100000.0f				// resistance of NTC at 25C
+#define BETA			3950.0f					// beta value of NTC
+
 enum {
 	NTC1 = ADC_CHANNEL_4, 	// ADC1_IN4
 	NTC2 = ADC_CHANNEL_1,	// ADC1_IN1

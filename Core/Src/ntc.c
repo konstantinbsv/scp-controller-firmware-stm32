@@ -49,3 +49,16 @@ float GetResistance_R(uint8_t ntc_channel) {
 
 	return r_ntc;
 }
+
+float GetTemp_C(uint8_t ntc_channel) {
+	// get resistance calculated from ADC
+	float r_ntc = GetResistance_R(ntc_channel);
+
+	// calculate temperature in Kelvin using Steinhart-Hart beta-parameter equation
+	float temp_kelvin = 1.0 / ( 1.0/T0 + (1.0/BETA)*log(r_ntc/R0) );
+
+	// convert to Celsius
+	float temp_c = temp_kelvin - 273.15;
+
+	return temp_c;
+}
