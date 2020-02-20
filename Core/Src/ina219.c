@@ -113,3 +113,15 @@ float GetPower_mW(uint8_t device_address) {
 																		// and * 1000 (to convert to mW from uW)
 	return power_mW;
 }
+
+/*
+ * @brief Calculates Thevenin equivaent resistance of the load connected.
+ *
+ * @return Thevenin equivalent resistance in ohms (ohms)
+ */
+float GetThevenin_R(uint8_t device_address) {
+	float voltage_V = GetBusVoltage_V(device_address);		// get voltage in V
+	float current_A = GetCurrent_mA(device_address) / 1000; // get current in mA and convert to A
+
+	return voltage_V / current_A;
+}
