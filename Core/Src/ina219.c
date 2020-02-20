@@ -54,7 +54,7 @@ HAL_StatusTypeDef WriteRegister (uint8_t device_address, uint8_t reg_address, ui
  */
 HAL_StatusTypeDef Set_16V_1A55 (uint8_t device_address) {
 	uint16_t config_reg = 	INA219_BRNG_16V | INA219_PGA_160mV |
-							INA219_SADC_12BIT | INA219_BADC_12BIT |
+							INA219_SADC_12BIT_32SMPL | INA219_BADC_12BIT_32SMPL |
 							INA219_MODE_S_AND_B_V_CONTINUOUS;
 	current_lsb 	= 1.55 / 32768;			// max_current / 2^15
 	power_lsb 		= current_lsb * 20;
@@ -115,7 +115,7 @@ float GetPower_mW(uint8_t device_address) {
 }
 
 /*
- * @brief Calculates Thevenin equivaent resistance of the load connected.
+ * @brief Calculates Thevenin equivalent resistance of the load connected.
  *
  * @return Thevenin equivalent resistance in ohms (ohms)
  */
