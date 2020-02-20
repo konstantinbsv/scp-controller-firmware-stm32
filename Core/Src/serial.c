@@ -52,9 +52,9 @@ HAL_StatusTypeDef UARTPrintFloat(float data, uint8_t fractional_digits) {
 
 	// copy into write_buffer with decimal point
 	if (fractional_digits == 0) {
-		sprintf((char*)write_buffer, "%u", integer_part); // do not print decimal point
+		sprintf((char*)write_buffer, "%lu", integer_part); // do not print decimal point
 	} else {
-		sprintf((char*)write_buffer, "%u.%u", integer_part, fractional_part);
+		sprintf((char*)write_buffer, "%lu.%lu", integer_part, fractional_part);
 	}
 
 	HAL_StatusTypeDef status = HAL_UART_Transmit(serial_handle, write_buffer, strlen((char 	*)write_buffer), SERIAL_TIMEOUT);
