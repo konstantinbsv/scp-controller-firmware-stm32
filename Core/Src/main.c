@@ -126,24 +126,31 @@ int main(void)
 	  float bus_v = GetBusVoltage_V(INA219_ADDRESS_1);
 	  float current = GetCurrent_mA(INA219_ADDRESS_1);
 	  float power = GetPower_mW(INA219_ADDRESS_1);
-	  uint32_t ntc1_reading = ReadNTC(NTC1_CHANNEL);
 
-	  UARTPrintCharArray("Bus voltage: ");
+	  UARTPrintCharArray("Bus voltage (V):    ");
 	  UARTPrintFloat(bus_v, 3);
 	  UARTNewlineRet();
 
-	  UARTPrintCharArray("Current: ");
+	  UARTPrintCharArray("Current     (mA):   ");
 	  UARTPrintFloat(current, 3);
 	  UARTNewlineRet();
 
-	  UARTPrintCharArray("Power: ");
+	  UARTPrintCharArray("Power       (mW):   ");
 	  UARTPrintFloat(power, 3);
+	  UARTNewlineRet();
+
+	  UARTPrintCharArray("R_Thevenin  (Ohms): ");
+	  UARTPrintFloat(GetThevenin_R(INA219_ADDRESS_1), 3);
 	  UARTNewlineRet();
 	  UARTNewlineRet();
 
-	  UARTPrintCharArray("NTC1: ");
-	  UARTPrintFloat(ntc1_reading, 3);
+	  UARTPrintCharArray("NTC1 Temp (C): ");
+	  UARTPrintFloat(GetTemp_C(NTC1), 3);
 	  UARTNewlineRet();
+
+	  UARTPrintCharArray("NTC2 Temp (C): ");
+	  UARTPrintFloat(GetTemp_C(NTC2), 3);
+	  UARTNewlineRet(); UARTNewlineRet(); UARTNewlineRet(); UARTNewlineRet();
 
 	  HAL_Delay(1000);
 //	  HAL_GPIO_TogglePin(SCP1_GPIO_Port, SCP1_Pin);
