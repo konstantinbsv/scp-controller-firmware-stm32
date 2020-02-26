@@ -27,6 +27,7 @@
 #include "serial.h"
 #include "ntc.h"
 #include "pwm.h"
+#include "pid.h"
 
 /* USER CODE END Includes */
 
@@ -68,6 +69,7 @@ static void MX_ADC1_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM3_Init(void);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -91,7 +93,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	 HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -121,10 +123,10 @@ int main(void)
 
   Set_16V_1A55(INA219_ADDRESS_1);
 
-  // enable SCP1 PWM
-  SetPWM_SCP1(50);
-  SetPWM_SCP2(10);
-  SetPWM_SCP3(90);
+  // Set all PWM to 0%
+  SetPWM_SCP1(0);
+  SetPWM_SCP2(0);
+  SetPWM_SCP3(0);
 
   /* USER CODE END 2 */
  
@@ -134,47 +136,30 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  float bus_v = GetBusVoltage_V(INA219_ADDRESS_1);
-	  float current = GetCurrent_mA(INA219_ADDRESS_1);
-	  float power = GetPower_mW(INA219_ADDRESS_1);
+	  float bus_v1 = GetBusVoltage_V(INA219_ADDRESS_1);
+	  float current1 = GetCurrent_mA(INA219_ADDRESS_1);
+	  float power1 = GetPower_mW(INA219_ADDRESS_1);
 
-	  UARTPrintCharArray("Bus voltage (V):    ");
-	  UARTPrintFloat(bus_v, 3);
-	  UARTNewlineRet();
+	  float bus_v2 = GetBusVoltage_V(INA219_ADDRESS_2);
+	  float current2 = GetCurrent_mA(INA219_ADDRESS_2);
+	  float power2 = GetPower_mW(INA219_ADDRESS_2);
 
-	  UARTPrintCharArray("Current     (mA):   ");
-	  UARTPrintFloat(current, 3);
-	  UARTNewlineRet();
+	  float bus_v3 = GetBusVoltage_V(INA219_ADDRESS_3);
+	  float current3 = GetCurrent_mA(INA219_ADDRESS_3);
+	  float power3 = GetPower_mW(INA219_ADDRESS_3);
 
-	  UARTPrintCharArray("Power       (mW):   ");
-	  UARTPrintFloat(power, 3);
-	  UARTNewlineRet();
+	  float temp1 = GetTemp_C(NTC1);
+	  float temp2 = GetTemp_C(NTC2);
+	  float temp3 = GetTemp_C(NTC3);
 
-	  UARTPrintCharArray("R_Thevenin  (Ohms): ");
-	  UARTPrintFloat(GetThevenin_R(INA219_ADDRESS_1), 3);
-	  UARTNewlineRet();
-	  UARTNewlineRet();
+	  SendDataPacket(bus_v1, current1, power1, temp1, bus_v2, current2,
+			  	  	  power2, temp2, bus_v3, current3, power3, temp3);
 
-	  UARTPrintCharArray("NTC1 Temp (C): ");
-	  UARTPrintFloat(GetTemp_C(NTC1), 3);
-	  UARTNewlineRet();
+	  updatePID(SCP1_INDEX, temp1);
+	  updatePID(SCP2_INDEX, temp2);
+	  updatePID(SCP3_INDEX, temp3);
 
-	  UARTPrintCharArray("NTC2 Temp (C): ");
-	  UARTPrintFloat(GetTemp_C(NTC2), 3);
-	  UARTNewlineRet();
-
-	  UARTPrintCharArray("NTC3 Temp (C): ");
-	  UARTPrintFloat(GetTemp_C(NTC3), 3);
-	  UARTNewlineRet();
-	  UARTNewlineRet(); UARTNewlineRet(); UARTNewlineRet(); UARTNewlineRet();
-
-	  HAL_Delay(1000);
-//	  HAL_GPIO_TogglePin(SCP1_GPIO_Port, SCP1_Pin);
-//	  HAL_Delay(100);
-//	  HAL_GPIO_TogglePin(SCP2_GPIO_Port, SCP2_Pin);
-//	  HAL_Delay(100);
-//	  HAL_GPIO_TogglePin(SCP3_GPIO_Port, SCP3_Pin);
-//	  HAL_Delay(100);
+	  HAL_Delay(50);
 
     /* USER CODE END WHILE */
 
@@ -500,6 +485,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 
 /* USER CODE END 4 */
 
