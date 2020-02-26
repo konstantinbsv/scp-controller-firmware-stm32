@@ -42,9 +42,9 @@ enum {
 
 // D (Derivative) - constant
 enum {
-	SCP1_D = 0,
-	SCP2_D = 0,
-	SCP3_D = 0,
+	SCP1_D = 5,
+	SCP2_D = 5,
+	SCP3_D = 5,
 };
 
 /* Constant lookup arrays */
@@ -54,6 +54,8 @@ extern const float D_COEFS[];
 
 /* Variables */
 extern float setpoints[];
+extern float last_error[];
+extern float integral[];
 
 /* Function Prototypes */
 uint16_t updatePID(uint8_t SCP_index, float current_temp);

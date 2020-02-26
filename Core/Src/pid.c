@@ -15,6 +15,10 @@ const float D_COEFS[] = {SCP1_D, SCP2_D, SCP3_D};
 // initialize set points to default values
 float setpoints[] = {DEFAULT_SETPOINT_SCP1, DEFAULT_SETPOINT_SCP2, DEFAULT_SETPOINT_SCP3};
 
+// initialize last errors and integral terms to zero
+float last_error[3]	= {0};
+float integral[3]	= {0};
+
 
 void SetSetpoint_SCP1(uint8_t SCP_index, float new_temp_setpoint) {
 	setpoints[SCP_index] = new_temp_setpoint;
@@ -25,13 +29,13 @@ uint16_t updatePID(uint8_t SCP_index, float current_temp) {
 	float error = setpoints[SCP_index] - current_temp; // calculate error
 
 	// calculate p response
-	float p_response = error * P_COEFS[SCP_index];
+	float p_response = P_COEFS[SCP_index] * ( error );
 
 	// TODO: calculate i response
 	float i_response = 0;
 
 	// TODO: calculate d response
-	float d_response = 0;
+	float d_response = D_COEFS[SCP_index] * ( last_error[SCP_index] - error );
 
 	// final PWM output is sum of all responses
 	PWM_output = (uint8_t)( p_response + i_response + d_response);
@@ -62,6 +66,10 @@ uint16_t updatePID(uint8_t SCP_index, float current_temp) {
 		SetPWM_SCP3(0);
 		break;
 	}
+
+	// update last error (error that will be used next time for integral)
+	// to be error we just calculated
+	last_error[SCP_index] = error;
 
 	return PWM_output;
 }
