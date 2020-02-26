@@ -27,25 +27,21 @@ enum {
 
 /* PID Constant Definitions */
 // P (Proportional) - constant
-enum {
-	SCP1_P = 75,
-	SCP2_P = 20,
-	SCP3_P = 75
-};
+#define	SCP1_P	75
+#define	SCP2_P	20
+#define	SCP3_P	75
 
 // I (Integral) - constant
-enum {
-	SCP1_I = 0,
-	SCP2_I = 0,
-	SCP3_I = 0,
-};
+#define	SCP1_I  0.5f
+#define	SCP2_I	0.08f
+#define	SCP3_I	0.3f
+
 
 // D (Derivative) - constant
-enum {
-	SCP1_D = 5,
-	SCP2_D = 5,
-	SCP3_D = 5,
-};
+#define	SCP1_D	30
+#define	SCP2_D	10
+#define	SCP3_D	50
+
 
 /* Constant lookup arrays */
 extern const float P_COEFS[];

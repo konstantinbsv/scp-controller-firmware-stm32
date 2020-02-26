@@ -6,6 +6,7 @@
  */
 
 #include "pid.h"
+#include "serial.h"
 
 // initialize constant PID lookup arrays
 const float P_COEFS[] = {SCP1_P, SCP2_P, SCP3_P};
@@ -24,18 +25,25 @@ void SetSetpoint_SCP1(uint8_t SCP_index, float new_temp_setpoint) {
 	setpoints[SCP_index] = new_temp_setpoint;
 }
 
-uint16_t updatePID(uint8_t SCP_index, float current_temp) {
+uint16_t updatePID(uint8_t scp_index, float current_temp) {
 	uint8_t PWM_output = 0;
-	float error = setpoints[SCP_index] - current_temp; // calculate error
+	float error = setpoints[scp_index] - current_temp; // calculate error
 
 	// calculate p response
-	float p_response = P_COEFS[SCP_index] * ( error );
+	float p_response = P_COEFS[scp_index] * ( error );
 
+	// update integral calculation
+	integral[scp_index] = integral[scp_index] + error;
 	// TODO: calculate i response
-	float i_response = 0;
+	float i_response = I_COEFS[scp_index] * ( integral[scp_index] );
+//		if (scp_index == SCP3_INDEX) {
+//			UARTPrintCharArray("integral resp 3: ");
+//			UARTPrintFloat(i_response, 3);
+//			UARTNewlineRet();
+//		}
 
 	// TODO: calculate d response
-	float d_response = D_COEFS[SCP_index] * ( last_error[SCP_index] - error );
+	float d_response = D_COEFS[scp_index] * ( error - last_error[scp_index] );
 
 	// final PWM output is sum of all responses
 	PWM_output = (uint8_t)( p_response + i_response + d_response);
@@ -48,7 +56,7 @@ uint16_t updatePID(uint8_t SCP_index, float current_temp) {
 		PWM_output = 0;
 	}
 
-	switch (SCP_index)
+	switch (scp_index)
 	{
 	case SCP1_INDEX:
 		SetPWM_SCP1(PWM_output);
@@ -69,7 +77,7 @@ uint16_t updatePID(uint8_t SCP_index, float current_temp) {
 
 	// update last error (error that will be used next time for integral)
 	// to be error we just calculated
-	last_error[SCP_index] = error;
+	last_error[scp_index] = error;
 
 	return PWM_output;
 }
