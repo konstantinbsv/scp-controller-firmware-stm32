@@ -72,3 +72,62 @@ HAL_StatusTypeDef UARTNewlineRet() {
 
 	return UARTPrintCharArray(newline_ret);
 }
+
+/**
+ * @brief Sends standardized data packet over UART
+ *
+ * @return void
+ */
+
+void SendDataPacket(float bus_v1, float current1, float power1, float temp1,
+		float bus_v2, float current2, float power2, float temp2, float bus_v3,
+		float current3, float power3, float temp3) {
+
+	// send START signal
+	UARTPrintCharArray("START");
+	UARTNewlineRet();
+
+	/* Data Set 1 */
+	UARTPrintCharArray("Voltage1: ");
+	UARTPrintFloat(bus_v1, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("Current1: ");
+	UARTPrintFloat(current1, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("Power1: ");
+	UARTPrintFloat(power1, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("NTC1: ");
+	UARTPrintFloat(temp1, 3);
+	UARTNewlineRet();
+
+	/* Data Set 2 */
+	UARTPrintCharArray("Voltage2: ");
+	UARTPrintFloat(bus_v2, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("Current2: ");
+	UARTPrintFloat(current2, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("Power2: ");
+	UARTPrintFloat(power2, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("NTC2: ");
+	UARTPrintFloat(temp2, 3);
+	UARTNewlineRet();
+
+	/* Data Set 3 */
+	UARTPrintCharArray("Voltage3: ");
+	UARTPrintFloat(bus_v3, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("Current3: ");
+	UARTPrintFloat(current3, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("Power3: ");
+	UARTPrintFloat(power3, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("NTC3: ");
+	UARTPrintFloat(temp3, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("END");
+	UARTNewlineRet();
+}
