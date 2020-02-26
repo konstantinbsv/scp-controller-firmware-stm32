@@ -17,6 +17,13 @@
 #define DEFAULT_SETPOINT_SCP2	35.0f
 #define DEFAULT_SETPOINT_SCP3	40.0f
 
+// Indices for SCPs
+enum {
+	SCP1_INDEX = 0,
+	SCP2_INDEX = 1,
+	SCP3_INDEX = 2
+};
+
 
 /* PID Constant Definitions */
 // P (Proportional) - constant
@@ -40,14 +47,15 @@ enum {
 	SCP3_D = 0,
 };
 
+/* Constant lookup arrays */
+extern const float P_COEFS[];
+extern const float I_COEFS[];
+extern const float D_COEFS[];
+
 /* Variables */
-extern float scp1_setpoint;
-extern float scp2_setpoint;
-extern float scp3_setpoint;
+extern float setpoints[];
 
 /* Function Prototypes */
-void SetSetpointSCP1(float);
-void SetSetpointSCP2(float);
-void SetSetpointSCP3(float);
+uint16_t updatePID(uint8_t SCP_index, float current_temp);
 
 #endif /* INC_PID_H_ */

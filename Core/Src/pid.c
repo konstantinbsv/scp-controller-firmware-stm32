@@ -7,22 +7,62 @@
 
 #include "pid.h"
 
+// initialize constant PID lookup arrays
+const float P_COEFS[] = {SCP1_P, SCP2_P, SCP3_P};
+const float I_COEFS[] = {SCP1_I, SCP2_I, SCP3_I};
+const float D_COEFS[] = {SCP1_D, SCP2_D, SCP3_D};
 
-// initialize set points with default values
-float scp1_setpoint = DEFAULT_SETPOINT_SCP1;
-float scp2_setpoint = DEFAULT_SETPOINT_SCP2;
-float scp3_setpoint = DEFAULT_SETPOINT_SCP3;
+// initialize set points to default values
+float setpoints[] = {DEFAULT_SETPOINT_SCP1, DEFAULT_SETPOINT_SCP2, DEFAULT_SETPOINT_SCP3};
 
 
-void SetSetpointSCP1(float temp_setpoint) {
-	scp1_setpoint = temp_setpoint;
+void SetSetpoint_SCP1(uint8_t SCP_index, float new_temp_setpoint) {
+	setpoints[SCP_index] = new_temp_setpoint;
 }
 
-void SetSetpointSCP2(float temp_setpoint) {
-	scp2_setpoint = temp_setpoint;
-}
+uint16_t updatePID(uint8_t SCP_index, float current_temp) {
+	uint8_t PWM_output = 0;
+	float error = setpoints[SCP_index] - current_temp; // calculate error
 
-void SetSetpointSCP3(float temp_setpoint) {
-	scp3_setpoint = temp_setpoint;
+	// calculate p response
+	float p_response = error * P_COEFS[SCP_index];
+
+	// TODO: calculate i response
+	float i_response = 0;
+
+	// TODO: calculate d response
+	float d_response = 0;
+
+	// final PWM output is sum of all responses
+	PWM_output = (uint8_t)( p_response + i_response + d_response);
+
+	// limit duty cycle to [0%; 100%]
+	if ( PWM_output > 100 ) {
+		PWM_output = 100;
+	}
+	if ( PWM_output < 0 ) {
+		PWM_output = 0;
+	}
+
+	switch (SCP_index)
+	{
+	case SCP1_INDEX:
+		SetPWM_SCP1(PWM_output);
+		break;
+	case SCP2_INDEX:
+		SetPWM_SCP2(PWM_output);
+	  	break;
+	case SCP3_INDEX:
+		SetPWM_SCP3(PWM_output);
+		break;
+	default:
+		// set all PWMs to 0
+		SetPWM_SCP1(0);
+		SetPWM_SCP2(0);
+		SetPWM_SCP3(0);
+		break;
+	}
+
+	return PWM_output;
 }
 
