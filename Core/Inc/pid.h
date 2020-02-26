@@ -11,8 +11,14 @@
 /* Includes */
 #include "pwm.h"
 
-/* PID Constant Definitions */
+/* Constants */
+// Default temperature set points
+#define DEFAULT_SETPOINT_SCP1	35.0f
+#define DEFAULT_SETPOINT_SCP2	35.0f
+#define DEFAULT_SETPOINT_SCP3	40.0f
 
+
+/* PID Constant Definitions */
 // P (Proportional) - constant
 enum {
 	SCP1_P = 75,
@@ -34,7 +40,14 @@ enum {
 	SCP3_D = 0,
 };
 
-/* Function Prototypes */
+/* Variables */
+extern float scp1_setpoint;
+extern float scp2_setpoint;
+extern float scp3_setpoint;
 
+/* Function Prototypes */
+void SetSetpointSCP1(float);
+void SetSetpointSCP2(float);
+void SetSetpointSCP3(float);
 
 #endif /* INC_PID_H_ */
