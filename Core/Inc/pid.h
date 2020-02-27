@@ -14,8 +14,8 @@
 /* Constants */
 // Default temperature set points
 #define DEFAULT_SETPOINT_SCP1	35.0f
-#define DEFAULT_SETPOINT_SCP2	35.0f
-#define DEFAULT_SETPOINT_SCP3	40.0f
+#define DEFAULT_SETPOINT_SCP2	45.0f
+#define DEFAULT_SETPOINT_SCP3	45.0f
 
 // Indices for SCPs
 enum {
@@ -44,14 +44,14 @@ enum {
 
 
 /* Constant lookup arrays */
-extern const float P_COEFS[];
-extern const float I_COEFS[];
-extern const float D_COEFS[];
+static const float P_COEFS[];
+static const float I_COEFS[];
+static const float D_COEFS[];
 
 /* Variables */
-extern float setpoints[];
-extern float last_error[];
-extern float integral[];
+static float setpoints[];
+static float last_error[];
+static float integral[];
 
 /* Function Prototypes */
 uint16_t updatePID(uint8_t SCP_index, float current_temp);

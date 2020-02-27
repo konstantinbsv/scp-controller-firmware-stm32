@@ -9,16 +9,16 @@
 #include "serial.h"
 
 // initialize constant PID lookup arrays
-const float P_COEFS[] = {SCP1_P, SCP2_P, SCP3_P};
-const float I_COEFS[] = {SCP1_I, SCP2_I, SCP3_I};
-const float D_COEFS[] = {SCP1_D, SCP2_D, SCP3_D};
+static const float P_COEFS[] = {SCP1_P, SCP2_P, SCP3_P};
+static const float I_COEFS[] = {SCP1_I, SCP2_I, SCP3_I};
+static const float D_COEFS[] = {SCP1_D, SCP2_D, SCP3_D};
 
 // initialize set points to default values
-float setpoints[] = {DEFAULT_SETPOINT_SCP1, DEFAULT_SETPOINT_SCP2, DEFAULT_SETPOINT_SCP3};
+static float setpoints[] = {DEFAULT_SETPOINT_SCP1, DEFAULT_SETPOINT_SCP2, DEFAULT_SETPOINT_SCP3};
 
 // initialize last errors and integral terms to zero
-float last_error[3]	= {0};
-float integral[3]	= {0};
+static float last_error[3]	= {0};
+static float integral[3]	= {0};
 
 
 void SetSetpoint_SCP1(uint8_t SCP_index, float new_temp_setpoint) {
