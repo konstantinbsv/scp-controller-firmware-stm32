@@ -17,6 +17,9 @@ static UART_HandleTypeDef *serial_handle = NULL;
  */
 HAL_StatusTypeDef InitializeUART(UART_HandleTypeDef *handle) {
 	serial_handle = handle;
+	__HAL_UART_ENABLE(serial_handle); // set CE bit in CR1 register to enable UART
+	serial_handle->Init.Mode = UART_MODE_TX_RX; // set UART mode to RX TX by setting CR1 register bits
+
 
 	return HAL_OK;
 }
