@@ -69,7 +69,6 @@ static void MX_ADC1_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM3_Init(void);
-
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -93,7 +92,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	 HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -152,12 +151,12 @@ int main(void)
 	  float temp2 = GetTemp_C(NTC2);
 	  float temp3 = GetTemp_C(NTC3);
 
-	  SendDataPacket(bus_v1, current1, power1, temp1, bus_v2, current2,
-			  	  	  power2, temp2, bus_v3, current3, power3, temp3);
+	  uint8_t pwm1 = updatePID(SCP1_INDEX, temp1);
+	  uint8_t pwm2 = updatePID(SCP2_INDEX, temp2);
+	  uint8_t pwm3 = updatePID(SCP3_INDEX, temp3);
 
-	  updatePID(SCP1_INDEX, temp1);
-	  updatePID(SCP2_INDEX, temp2);
-	  updatePID(SCP3_INDEX, temp3);
+	  SendDataPacket(bus_v1, current1, power1, temp1, bus_v2, current2,
+			  	  	  power2, temp2, bus_v3, current3, power3, temp3, pwm1, pwm2, pwm3);
 
 	  HAL_Delay(50);
 

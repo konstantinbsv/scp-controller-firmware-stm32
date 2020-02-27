@@ -81,7 +81,7 @@ HAL_StatusTypeDef UARTNewlineRet() {
 
 void SendDataPacket(float bus_v1, float current1, float power1, float temp1,
 		float bus_v2, float current2, float power2, float temp2, float bus_v3,
-		float current3, float power3, float temp3) {
+		float current3, float power3, float temp3, uint8_t pwm1, uint8_t pwm2, uint8_t pwm3) {
 
 	// send START signal
 	UARTPrintCharArray("START");
@@ -100,6 +100,9 @@ void SendDataPacket(float bus_v1, float current1, float power1, float temp1,
 	UARTPrintCharArray("NTC1: ");
 	UARTPrintFloat(temp1, 3);
 	UARTNewlineRet();
+	UARTPrintCharArray("PWM1: ");
+	UARTPrintFloat(pwm1, 3);
+	UARTNewlineRet();
 
 	/* Data Set 2 */
 	UARTPrintCharArray("Voltage2: ");
@@ -113,6 +116,9 @@ void SendDataPacket(float bus_v1, float current1, float power1, float temp1,
 	UARTNewlineRet();
 	UARTPrintCharArray("NTC2: ");
 	UARTPrintFloat(temp2, 3);
+	UARTNewlineRet();
+	UARTPrintCharArray("PWM2: ");
+	UARTPrintFloat(pwm2, 3);
 	UARTNewlineRet();
 
 	/* Data Set 3 */
@@ -128,6 +134,10 @@ void SendDataPacket(float bus_v1, float current1, float power1, float temp1,
 	UARTPrintCharArray("NTC3: ");
 	UARTPrintFloat(temp3, 3);
 	UARTNewlineRet();
+	UARTPrintCharArray("PWM3: ");
+	UARTPrintFloat(pwm3, 3);
+	UARTNewlineRet();
 	UARTPrintCharArray("END");
 	UARTNewlineRet();
+
 }
