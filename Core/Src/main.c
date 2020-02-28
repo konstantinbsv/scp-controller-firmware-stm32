@@ -57,8 +57,6 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 
-uint16_t read_buffer[1]; // buffer to store data read from I2C
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
