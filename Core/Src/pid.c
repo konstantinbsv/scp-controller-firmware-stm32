@@ -21,7 +21,7 @@ static float last_error[3]	= {0};
 static float integral[3]	= {0};
 
 
-void SetSetpoint_SCP1(uint8_t SCP_index, float new_temp_setpoint) {
+void SetSetpoint(uint8_t SCP_index, float new_temp_setpoint) {
 	setpoints[SCP_index] = new_temp_setpoint;
 }
 

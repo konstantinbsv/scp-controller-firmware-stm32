@@ -54,6 +54,7 @@ static float last_error[];
 static float integral[];
 
 /* Function Prototypes */
+void SetSetpoint(uint8_t SCP_index, float new_temp_setpoint);
 uint16_t updatePID(uint8_t SCP_index, float current_temp);
 
 #endif /* INC_PID_H_ */
