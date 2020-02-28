@@ -9,6 +9,7 @@
 #include "serial.h"
 
 static UART_HandleTypeDef *serial_handle = NULL;
+static char uart_read_buffer[READ_BUFFER_SIZE] = {0}; // create empty read buffer
 
 /**
  * @brief Initialize UART handle
@@ -17,8 +18,10 @@ static UART_HandleTypeDef *serial_handle = NULL;
  */
 HAL_StatusTypeDef InitializeUART(UART_HandleTypeDef *handle) {
 	serial_handle = handle;
-	__HAL_UART_ENABLE(serial_handle); // set CE bit in CR1 register to enable UART
-	serial_handle->Init.Mode = UART_MODE_TX_RX; // set UART mode to RX TX by setting CR1 register bits
+	// __HAL_UART_ENABLE(serial_handle); // set CE bit in CR1 register to enable UART
+	// serial_handle->Init.Mode = UART_MODE_TX_RX; // set UART mode to RX TX by setting CR1 register bits
+
+	InitializeReceiveInterrupt();
 
 
 	return HAL_OK;
@@ -77,11 +80,48 @@ HAL_StatusTypeDef UARTNewlineRet() {
 }
 
 /**
+ *
+ */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	// TODO: is there a neater way to do this?
+	// extract raw chars from read buffer
+//	char raw_read_1[3] = {uart_read_buffer[0], uart_read_buffer[1], uart_read_buffer[2]};
+//	char raw_read_2[3] = {uart_read_buffer[5], uart_read_buffer[6], uart_read_buffer[7]};
+//	char raw_read_3[3] = {uart_read_buffer[10], uart_read_buffer[11], uart_read_buffer[12]};
+
+//	uint8_t new_setpoint_scp1 = 0;
+//	uint8_t new_setpoint_scp2 = 0;
+//	uint8_t new_setpoint_scp3 = 0;
+
+	uint16_t new_setpoints[3];
+
+	UARTPrintCharArray(uart_read_buffer);
+
+	sscanf(uart_read_buffer, "%hhu\r\n%hhu\r\n%hhu", &new_setpoints[0], &new_setpoints[1], &new_setpoints[3]);
+
+	// get new set po	int uint's from chars
+//	sscanf("123", "%hhu", &new_setpoint_scp1);
+//	sscanf(raw_read_2, "%hhu", &new_setpoint_scp2);
+//	sscanf(raw_read_3, "%hhu", &new_setpoint_scp3);
+
+	InitializeReceiveInterrupt(); // restart interrupt
+
+	__NOP();
+}
+
+/**
+ * Initialized HAL UART RX interrupt
+ * @return HAL status
+ */
+HAL_StatusTypeDef InitializeReceiveInterrupt(){
+	return HAL_UART_Receive_IT(serial_handle,(uint8_t *) uart_read_buffer, READ_BUFFER_SIZE);
+}
+
+/**
  * @brief Sends standardized data packet over UART
  *
  * @return void
  */
-
 void SendDataPacket(float bus_v1, float current1, float power1, float temp1,
 		float bus_v2, float current2, float power2, float temp2, float bus_v3,
 		float current3, float power3, float temp3, uint8_t pwm1, uint8_t pwm2, uint8_t pwm3) {
