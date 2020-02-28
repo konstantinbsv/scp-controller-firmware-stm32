@@ -14,14 +14,14 @@ static const float I_COEFS[] = {SCP1_I, SCP2_I, SCP3_I};
 static const float D_COEFS[] = {SCP1_D, SCP2_D, SCP3_D};
 
 // initialize set points to default values
-static float setpoints[] = {DEFAULT_SETPOINT_SCP1, DEFAULT_SETPOINT_SCP2, DEFAULT_SETPOINT_SCP3};
+static uint16_t setpoints[] = {DEFAULT_SETPOINT_SCP1, DEFAULT_SETPOINT_SCP2, DEFAULT_SETPOINT_SCP3};
 
 // initialize last errors and integral terms to zero
 static float last_error[3]	= {0};
 static float integral[3]	= {0};
 
 
-void SetSetpoint(uint8_t SCP_index, float new_temp_setpoint) {
+void SetSetpoint(uint8_t SCP_index, uint16_t new_temp_setpoint) {
 	setpoints[SCP_index] = new_temp_setpoint;
 }
 
