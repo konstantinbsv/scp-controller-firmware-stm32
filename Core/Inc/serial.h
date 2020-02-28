@@ -13,6 +13,7 @@
 #include "stm32f4xx_hal_uart.h"
 #include <string.h>		// standard C library, contains strcopy and strlen
 #include <stdio.h>
+#include "pid.h"
 
 /* Constants */
 #define SERIAL_TIMEOUT 		1000 		// used as timeout for HAL UART functions

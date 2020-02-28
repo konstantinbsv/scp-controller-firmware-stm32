@@ -83,26 +83,27 @@ HAL_StatusTypeDef UARTNewlineRet() {
  *
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+
+	uint16_t new_setpoints[3]; // will store new set points
+
 	// TODO: is there a neater way to do this?
 	// extract raw chars from read buffer
-//	char raw_read_1[3] = {uart_read_buffer[0], uart_read_buffer[1], uart_read_buffer[2]};
-//	char raw_read_2[3] = {uart_read_buffer[5], uart_read_buffer[6], uart_read_buffer[7]};
-//	char raw_read_3[3] = {uart_read_buffer[10], uart_read_buffer[11], uart_read_buffer[12]};
+	char raw_read_1[3] = {uart_read_buffer[0], uart_read_buffer[1], uart_read_buffer[2]};
+	char raw_read_2[3] = {uart_read_buffer[5], uart_read_buffer[6], uart_read_buffer[7]};
+	char raw_read_3[3] = {uart_read_buffer[10], uart_read_buffer[11], uart_read_buffer[12]};
 
-//	uint8_t new_setpoint_scp1 = 0;
-//	uint8_t new_setpoint_scp2 = 0;
-//	uint8_t new_setpoint_scp3 = 0;
+	sscanf(raw_read_1, "%hu", &new_setpoints[0]);
+	sscanf(raw_read_2, "%hu", &new_setpoints[1]);
+	sscanf(raw_read_3, "%hu", &new_setpoints[2]);
 
-	uint16_t new_setpoints[3];
+	uint8_t setpoints_array_size = sizeof(new_setpoints)/sizeof(new_setpoints[0]); // calculate array size
 
-	UARTPrintCharArray(uart_read_buffer);
-
-	sscanf(uart_read_buffer, "%hhu\r\n%hhu\r\n%hhu", &new_setpoints[0], &new_setpoints[1], &new_setpoints[3]);
-
-	// get new set po	int uint's from chars
-//	sscanf("123", "%hhu", &new_setpoint_scp1);
-//	sscanf(raw_read_2, "%hhu", &new_setpoint_scp2);
-//	sscanf(raw_read_3, "%hhu", &new_setpoint_scp3);
+	for (uint8_t i = 0; i < setpoints_array_size; i++) {
+		SetSetpoint(i + 1, new_setpoints[i]);
+		UARTPrintFloat(new_setpoints[i], 0);
+	}
+	// sscanf does not work
+	// sscanf(uart_read_buffer, "%hhu\r\n%hhu\r\n%hhu", &new_setpoints[0], &new_setpoints[1], &new_setpoints[3]);
 
 	InitializeReceiveInterrupt(); // restart interrupt
 
