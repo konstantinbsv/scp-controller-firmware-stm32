@@ -27,7 +27,14 @@ void SetSetpoint(uint8_t SCP_index, uint16_t new_temp_setpoint) {
 
 uint16_t updatePID(uint8_t scp_index, float current_temp) {
 	uint8_t PWM_output = 0;
-	float error = setpoints[scp_index] - current_temp; // calculate error
+	uint16_t setpoint = setpoints[scp_index];	// get setpoint from array
+
+	// if channel is disabled, skip it
+	if (setpoint == 0) {
+		return SetPWM(scp_index, 0); // PWM set to 0 for that SCP
+	}
+
+	float error = setpoint - current_temp; // calculate error
 
 	// calculate p response
 	float p_response = P_COEFS[scp_index] * ( error );
@@ -56,24 +63,7 @@ uint16_t updatePID(uint8_t scp_index, float current_temp) {
 		PWM_output = 0;
 	}
 
-	switch (scp_index)
-	{
-	case SCP1_INDEX:
-		SetPWM_SCP1(PWM_output);
-		break;
-	case SCP2_INDEX:
-		SetPWM_SCP2(PWM_output);
-	  	break;
-	case SCP3_INDEX:
-		SetPWM_SCP3(PWM_output);
-		break;
-	default:
-		// set all PWMs to 0
-		SetPWM_SCP1(0);
-		SetPWM_SCP2(0);
-		SetPWM_SCP3(0);
-		break;
-	}
+	SetPWM(scp_index, PWM_output);
 
 	// update last error (error that will be used next time for integral)
 	// to be error we just calculated
