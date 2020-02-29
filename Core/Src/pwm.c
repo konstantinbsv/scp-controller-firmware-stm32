@@ -47,3 +47,29 @@ HAL_StatusTypeDef SetPWM_SCP3(uint8_t duty_cycle) {
 
 	return status;
 }
+
+HAL_StatusTypeDef SetPWM(uint8_t scp_index, uint8_t duty_cycle){
+	HAL_StatusTypeDef status;
+
+	switch (scp_index)
+	{
+	case 0:
+		status = SetPWM_SCP1(duty_cycle);
+		break;
+	case 1:
+		status = SetPWM_SCP2(duty_cycle);
+	  	break;
+	case 2:
+		status = SetPWM_SCP3(duty_cycle);
+		break;
+	default:
+		// set all PWMs to 0
+		SetPWM_SCP1(0);
+		SetPWM_SCP2(0);
+		SetPWM_SCP3(0);
+		status = HAL_ERROR;
+		break;
+	}
+
+	return status;
+}
