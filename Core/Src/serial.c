@@ -99,15 +99,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	uint8_t setpoints_array_size = sizeof(new_setpoints)/sizeof(new_setpoints[0]); // calculate array size
 
 	for (uint8_t i = 0; i < setpoints_array_size; i++) {
-		SetSetpoint(i + 1, new_setpoints[i]);
-		UARTPrintFloat(new_setpoints[i], 0);
+		SetSetpoint(i, new_setpoints[i]);
 	}
-	// sscanf does not work
-	// sscanf(uart_read_buffer, "%hhu\r\n%hhu\r\n%hhu", &new_setpoints[0], &new_setpoints[1], &new_setpoints[3]);
 
-	InitializeReceiveInterrupt(); // restart interrupt
+	InitializeReceiveInterrupt(); // restart UART RX interrupt
 
-	__NOP();
+	// __NOP();
 }
 
 /**
