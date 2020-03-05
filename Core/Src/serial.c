@@ -84,22 +84,23 @@ HAL_StatusTypeDef UARTNewlineRet() {
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 
-	uint16_t new_setpoints[3]; // will store new set points
+	uint8_t request_specifier = uart_read_buffer[0] - '0'; // convert first char to uint8_t
+
+	uint16_t data[3]; // will store new set points
 
 	// TODO: is there a neater way to do this?
 	// extract raw chars from read buffer
-	char raw_read_1[3] = {uart_read_buffer[0], uart_read_buffer[1], uart_read_buffer[2]};
-	char raw_read_2[3] = {uart_read_buffer[5], uart_read_buffer[6], uart_read_buffer[7]};
-	char raw_read_3[3] = {uart_read_buffer[10], uart_read_buffer[11], uart_read_buffer[12]};
+	char raw_read_1[3] = {uart_read_buffer[1], uart_read_buffer[2], uart_read_buffer[3]};
+	char raw_read_2[3] = {uart_read_buffer[6], uart_read_buffer[7], uart_read_buffer[8]};
+	char raw_read_3[3] = {uart_read_buffer[11], uart_read_buffer[12], uart_read_buffer[13]};
 
-	sscanf(raw_read_1, "%hu", &new_setpoints[0]);
-	sscanf(raw_read_2, "%hu", &new_setpoints[1]);
-	sscanf(raw_read_3, "%hu", &new_setpoints[2]);
+	sscanf(raw_read_1, "%hu", &data[0]);
+	sscanf(raw_read_2, "%hu", &data[1]);
+	sscanf(raw_read_3, "%hu", &data[2]);
 
-	uint8_t setpoints_array_size = sizeof(new_setpoints)/sizeof(new_setpoints[0]); // calculate array size
-
+	uint8_t setpoints_array_size = sizeof(data)/sizeof(data[0]); // calculate array size
 	for (uint8_t i = 0; i < setpoints_array_size; i++) {
-		SetSetpoint(i, new_setpoints[i]);
+		SetSetpoint(i, data[i]);
 	}
 
 	InitializeReceiveInterrupt(); // restart UART RX interrupt

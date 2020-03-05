@@ -16,8 +16,8 @@
 #include "pid.h"
 
 /* Constants */
-#define SERIAL_TIMEOUT 		1000 		// used as timeout for HAL UART functions
-#define READ_BUFFER_SIZE	3*(5)		// 3*(5 chars per line), includes \r\n termination
+#define SERIAL_TIMEOUT 		1000 			// used as timeout for HAL UART functions
+#define READ_BUFFER_SIZE	1 + 3*(5)		// 1 request specifier + 3*(5 chars per line), includes \r\n termination
 
 /* Function Prototypes */
 HAL_StatusTypeDef InitializeUART(UART_HandleTypeDef *serial_handle);
