@@ -20,6 +20,9 @@ static uint16_t setpoints[] = {DEFAULT_SETPOINT_SCP1, DEFAULT_SETPOINT_SCP2, DEF
 static float last_error[3]	= {0};
 static float integral[3]	= {0};
 
+uint16_t getSetpoint(uint8_t SCP_index) {
+	return setpoints[SCP_index];
+}
 
 void SetSetpoint(uint8_t SCP_index, uint16_t new_temp_setpoint) {
 	setpoints[SCP_index] = new_temp_setpoint;
