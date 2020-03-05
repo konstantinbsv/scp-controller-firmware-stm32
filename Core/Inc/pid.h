@@ -29,18 +29,18 @@ enum {
 // P (Proportional) - constant
 #define	SCP1_P	75
 #define	SCP2_P	10
-#define	SCP3_P	75
+#define	SCP3_P	5
 
 // I (Integral) - constant
 #define	SCP1_I  0.5f
 #define	SCP2_I	0.08f
-#define	SCP3_I	0.3f
+#define	SCP3_I	0.08f
 
 
 // D (Derivative) - constant
 #define	SCP1_D	30
 #define	SCP2_D	5
-#define	SCP3_D	50
+#define	SCP3_D	5
 
 
 /* Constant lookup arrays */
