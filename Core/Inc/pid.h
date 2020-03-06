@@ -29,18 +29,20 @@ enum {
 // P (Proportional) - constant
 #define	SCP1_P	75
 #define	SCP2_P	10
-#define	SCP3_P	5
+#define	SCP3_P	10
 
 // I (Integral) - constant
 #define	SCP1_I  0.5f
 #define	SCP2_I	0.08f
 #define	SCP3_I	0.08f
+//integrator wind-up prevention
+#define MAX_I 	50
 
 
 // D (Derivative) - constant
 #define	SCP1_D	30
 #define	SCP2_D	5
-#define	SCP3_D	5
+#define	SCP3_D	10
 
 
 /* Constant lookup arrays */
@@ -54,7 +56,6 @@ static float last_error[];
 static float integral[];
 
 /* Function Prototypes */
-uint16_t getSetpoint(uint8_t SCP_index);
 void SetSetpoint(uint8_t SCP_index, uint16_t new_temp_setpoint);
 uint16_t updatePID(uint8_t SCP_index, float current_temp);
 

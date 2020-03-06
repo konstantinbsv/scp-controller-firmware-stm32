@@ -20,9 +20,6 @@ static uint16_t setpoints[] = {DEFAULT_SETPOINT_SCP1, DEFAULT_SETPOINT_SCP2, DEF
 static float last_error[3]	= {0};
 static float integral[3]	= {0};
 
-uint16_t getSetpoint(uint8_t SCP_index) {
-	return setpoints[SCP_index];
-}
 
 void SetSetpoint(uint8_t SCP_index, uint16_t new_temp_setpoint) {
 	setpoints[SCP_index] = new_temp_setpoint;
@@ -46,11 +43,13 @@ uint16_t updatePID(uint8_t scp_index, float current_temp) {
 	integral[scp_index] = integral[scp_index] + error;
 	// TODO: calculate i response
 	float i_response = I_COEFS[scp_index] * ( integral[scp_index] );
-//		if (scp_index == SCP3_INDEX) {
-//			UARTPrintCharArray("integral resp 3: ");
-//			UARTPrintFloat(i_response, 3);
-//			UARTNewlineRet();
-//		}
+	// prevent integrator wind-up
+	if (integral[scp_index] > MAX_I){
+		integral[scp_index] = MAX_I;
+	}
+	if (integral[scp_index] < -MAX_I){
+		integral[scp_index] = -MAX_I;
+	}
 
 	// TODO: calculate d response
 	float d_response = D_COEFS[scp_index] * ( error - last_error[scp_index] );
