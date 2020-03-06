@@ -9,9 +9,9 @@
 #include "serial.h"
 
 // initialize constant PID lookup arrays
-static const float P_COEFS[] = {SCP1_P, SCP2_P, SCP3_P};
-static const float I_COEFS[] = {SCP1_I, SCP2_I, SCP3_I};
-static const float D_COEFS[] = {SCP1_D, SCP2_D, SCP3_D};
+static float Kp[] = {SCP1_P, SCP2_P, SCP3_P};
+static float Ki[] = {SCP1_I, SCP2_I, SCP3_I};
+static float Kd[] = {SCP1_D, SCP2_D, SCP3_D};
 
 // initialize set points to default values
 static uint16_t setpoints[] = {DEFAULT_SETPOINT_SCP1, DEFAULT_SETPOINT_SCP2, DEFAULT_SETPOINT_SCP3};
@@ -37,22 +37,22 @@ uint16_t updatePID(uint8_t scp_index, float current_temp) {
 	float error = setpoint - current_temp; // calculate error
 
 	// calculate p response
-	float p_response = P_COEFS[scp_index] * ( error );
+	float p_response = Kp[scp_index] * ( error );
 
 	// update integral calculation
 	integral[scp_index] = integral[scp_index] + error;
 	// TODO: calculate i response
-	float i_response = I_COEFS[scp_index] * ( integral[scp_index] );
+	float i_response = Ki[scp_index] * ( integral[scp_index] );
 	// prevent integrator wind-up
-	if (integral[scp_index] > MAX_I){
+	if (integral[scp_index] > MAX_I) {
 		integral[scp_index] = MAX_I;
 	}
-	if (integral[scp_index] < -MAX_I){
+	if (integral[scp_index] < -MAX_I) {
 		integral[scp_index] = -MAX_I;
 	}
 
 	// TODO: calculate d response
-	float d_response = D_COEFS[scp_index] * ( error - last_error[scp_index] );
+	float d_response = Kd[scp_index] * ( error - last_error[scp_index] );
 
 	// final PWM output is sum of all responses
 	PWM_output = (uint8_t)( p_response + i_response + d_response);

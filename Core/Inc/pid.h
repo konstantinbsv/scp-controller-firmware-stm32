@@ -46,9 +46,9 @@ enum {
 
 
 /* Constant lookup arrays */
-static const float P_COEFS[];
-static const float I_COEFS[];
-static const float D_COEFS[];
+static float Kp[];
+static float Ki[];
+static float Kd[];
 
 /* Variables */
 static uint16_t setpoints[];
