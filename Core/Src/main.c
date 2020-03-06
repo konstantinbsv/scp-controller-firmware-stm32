@@ -55,6 +55,14 @@ TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart2;
 
+float bus_voltage[3] = {0};
+float current[3]	 = {0};
+float power[3]		 = {0};
+float temp[3]		 = {0};
+
+uint8_t pwm[3] 	   = {0};
+uint8_t lastPWM[3] = {0};
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -133,28 +141,31 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  float bus_v1 = GetBusVoltage_V(INA219_ADDRESS_1);
-	  float current1 = GetCurrent_mA(INA219_ADDRESS_1);
-	  float power1 = GetPower_mW(INA219_ADDRESS_1);
+	  // TODO: put this in a loop
+	  bus_voltage[0] = GetBusVoltage_V(INA219_ADDRESS_1);
+	  current[0]     = GetCurrent_mA(INA219_ADDRESS_1);
+	  power[0]       = GetPower_mW(INA219_ADDRESS_1);
 
-	  float bus_v2 = GetBusVoltage_V(INA219_ADDRESS_2);
-	  float current2 = GetCurrent_mA(INA219_ADDRESS_2);
-	  float power2 = GetPower_mW(INA219_ADDRESS_2);
+	  bus_voltage[1] = GetBusVoltage_V(INA219_ADDRESS_2);
+	  current[1]     = GetCurrent_mA(INA219_ADDRESS_2);
+	  power[1]       = GetPower_mW(INA219_ADDRESS_2);
 
-	  float bus_v3 = GetBusVoltage_V(INA219_ADDRESS_3);
-	  float current3 = GetCurrent_mA(INA219_ADDRESS_3);
-	  float power3 = GetPower_mW(INA219_ADDRESS_3);
+	  bus_voltage[2] = GetBusVoltage_V(INA219_ADDRESS_3);
+	  current[2]     = GetCurrent_mA(INA219_ADDRESS_3);
+	  power[2]       = GetPower_mW(INA219_ADDRESS_3);
 
-	  float temp1 = GetTemp_C(NTC1);
-	  float temp2 = GetTemp_C(NTC2);
-	  float temp3 = GetTemp_C(NTC3);
+	  temp[0] = GetTemp_C(NTC1);
+	  temp[1] = GetTemp_C(NTC2);
+	  temp[2] = GetTemp_C(NTC3);
 
-	  uint8_t pwm1 = updatePID(SCP1_INDEX, temp1);
-	  uint8_t pwm2 = updatePID(SCP2_INDEX, temp2);
-	  uint8_t pwm3 = updatePID(SCP3_INDEX, temp3);
+	  pwm[0] = updatePID(SCP1_INDEX, temp[0]);
+	  pwm[1] = updatePID(SCP2_INDEX, temp[1]);
+	  pwm[2] = updatePID(SCP3_INDEX, temp[2]);
 
-	  SendDataPacket(bus_v1, current1, power1, temp1, bus_v2, current2,
-			  	  	  power2, temp2, bus_v3, current3, power3, temp3, pwm1, pwm2, pwm3);
+	  SendDataPacket(bus_voltage[0], current[0], power[0], temp[0],
+			         bus_voltage[1], current[1], power[1], temp[1],
+					 bus_voltage[2], current[2], power[2], temp[2],
+					 pwm[0], pwm[1], pwm[2]);
 
 	  HAL_Delay(50);
 
