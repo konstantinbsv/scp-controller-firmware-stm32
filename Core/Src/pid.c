@@ -67,7 +67,7 @@ uint16_t updatePID(uint8_t scp_index, float current_temp) {
 
 	SetPWM(scp_index, PWM_output);
 
-	// update last error (error that will be used next time for integral)
+	// update last error (error that will be used next time for derivative)
 	// to be error we just calculated
 	last_error[scp_index] = error;
 
