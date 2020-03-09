@@ -27,7 +27,7 @@
 #include "serial.h"
 #include "ntc.h"
 #include "pwm.h"
-#include "pid.h"
+#include "state_machine.h"
 
 /* USER CODE END Includes */
 
@@ -47,23 +47,18 @@
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
-
 I2C_HandleTypeDef hi2c1;
-
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
-
 UART_HandleTypeDef huart2;
 
-float bus_voltage[3] = {0};
-float current[3]	 = {0};
-float power[3]		 = {0};
-float temp[3]		 = {0};
-
-uint8_t pwm[3] 	   = {0};
-uint8_t lastPWM[3] = {0};
-
 /* USER CODE BEGIN PV */
+
+float bus_voltage[3];
+float current[3];
+float power[3];
+float temp[3];
+uint8_t pwm[3];
 
 /* USER CODE END PV */
 
@@ -93,7 +88,6 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
-  
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -134,8 +128,6 @@ int main(void)
   SetPWM_SCP3(0);
 
   /* USER CODE END 2 */
- 
- 
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -158,9 +150,9 @@ int main(void)
 	  temp[1] = GetTemp_C(NTC2);
 	  temp[2] = GetTemp_C(NTC3);
 
-	  pwm[0] = updatePID(SCP1_INDEX, temp[0]);
-	  pwm[1] = updatePID(SCP2_INDEX, temp[1]);
-	  pwm[2] = updatePID(SCP3_INDEX, temp[2]);
+	  pwm[0] = fsm_controller(SCP1_INDEX, temp[0]);
+	  pwm[1] = fsm_controller(SCP2_INDEX, temp[1]);
+	  pwm[2] = fsm_controller(SCP3_INDEX, temp[2]);
 
 	  SendDataPacket(bus_voltage[0], current[0], power[0], temp[0],
 			         bus_voltage[1], current[1], power[1], temp[1],
