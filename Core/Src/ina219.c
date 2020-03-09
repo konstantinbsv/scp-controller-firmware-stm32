@@ -69,6 +69,28 @@ HAL_StatusTypeDef Set_16V_1A55 (uint8_t device_address) {
 }
 
 /*
+ * @brief Sets PGA gain and registers for measuring up to 32V and 1.15A. Calculates and stores current and power LSBs.
+ * 		  Calculates calibration value and initializes calibration register.
+ *
+ * @return HAL_OK if both calibration and configuration initializations are successful.
+ * 		   HAL_ERROR if either fails
+ */
+HAL_StatusTypeDef Set_32V_1A55 (uint8_t device_address) {
+	uint16_t config_reg = 	INA219_BRNG_32V | INA219_PGA_160mV |
+							INA219_SADC_12BIT_32SMPL | INA219_BADC_12BIT_32SMPL |
+							INA219_MODE_S_AND_B_V_CONTINUOUS;
+	current_lsb 	= 1.55 / 32768;			// max_current / 2^15
+	power_lsb 		= current_lsb * 20;
+	cal_reg 		= (uint16_t)(0.04096/(current_lsb*RSHUNT));
+
+	HAL_StatusTypeDef cal_stat 		= WriteRegister(device_address, INA219_REG_CAL, cal_reg);		// Program calibration register
+	HAL_StatusTypeDef conf_stat 	= WriteRegister(device_address, INA219_REG_CONFIG, config_reg);	// Set PGA gains and sampling modes in configuration register
+
+	return (cal_stat == conf_stat) ? HAL_OK : HAL_ERROR;
+}
+
+
+/*
  * @brief Retrieves and processes raw bus voltage value from register.
  *
  * @return Bus votlage in volts (V)
