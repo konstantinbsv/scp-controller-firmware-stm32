@@ -46,7 +46,7 @@ uint8_t fsm_controller(uint8_t scp_index, float current_temp) {
 	// if not in normal state
 	if (over_current_state[scp_index] || current_limit_state[scp_index]) {
 		// and if PID commands PWM duty cycle below last safe PWM minus hysteresis
-		if (duty_cycle < max_safe_PWM[scp_index] - HYSTERESIS) {
+		if (duty_cycle < max_safe_PWM[scp_index] - HYSTERESIS || duty_cycle == 0) {
 			over_current_state[scp_index]	= false;	// exit over-current state
 			current_limit_state[scp_index]	= false;	// exit current limit state
 			// FSM will now be in normal state
