@@ -120,7 +120,7 @@ int main(void)
   InitializeADC(&hadc1);
   InitializeTIM(&htim2, &htim3, &htim2);
 
-  Set_16V_1A55(INA219_ADDRESS_1);
+  Set_32V_1A55(INA219_ADDRESS_1);
 
   // Set all PWM to 0%
   SetPWM_SCP1(0);
