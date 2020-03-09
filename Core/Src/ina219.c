@@ -7,6 +7,8 @@
 
 #include <ina219.h>
 
+const uint8_t INA219_ADDRESSES[3] = {INA219_ADDRESS_1, INA219_ADDRESS_2, INA219_ADDRESS_3};
+
 static I2C_HandleTypeDef *ina219_i2c_handle = NULL;
 
 /**

@@ -30,7 +30,7 @@ enum {
 	INA219_ADDRESS_2 =	(0x41 << 1), // 1000001 (A0=VCC, A1=GND)
 	INA219_ADDRESS_3 =	(0x42 << 1)  // 1000010 (A0=SDA, A1=GND)
 };
-
+const uint8_t INA219_ADDRESSES[3];
 
 /*
  * Registers - page 19 of data sheet
